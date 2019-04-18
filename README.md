@@ -34,7 +34,7 @@ regression = LinearRegression()
 boston = load_boston()
 ```
 
-Create a baseline model which includes all the variables in the Boston housing data set to predict the house prices. The use 10-fold cross-validation and report the mean $R^2$ value as the baseline $R^2$.
+Create a baseline model which includes all the variables in the Boston housing data set to predict the house prices. Then use 10-fold cross-validation and report the mean $R^2$ value as the baseline $R^2$.
 
 
 ```python
@@ -54,13 +54,13 @@ baseline
 
 
 
-    0.7189415144723068
+    0.7189415144723069
 
 
 
 ## See how interactions improve your baseline
 
-Next, create all possible combinations of interactions, loop over them and add them to the baseline model one by one to see how they affect the R^2. We'll look at the 3 interactions which have the biggest effect on our R^2, so print out the top 3 combinations.
+Next, create all possible combinations of interactions, loop over them and add them to the baseline model one by one to see how they affect the $R^2$. We'll look at the 3 interactions which have the biggest effect on our $R^2$, so print out the top 3 combinations.
 
 You will create a for loop to loop through all the combinations of 2 predictors. You can use `combinations` from itertools to create a list of all the pairwise combinations. To find more info on how this is done, have a look [here](https://docs.python.org/2/library/itertools.html).
 
@@ -89,10 +89,10 @@ print("Top 3 interactions: %s" %sorted(interactions, key=lambda inter: inter[2],
 
 The top three interactions seem to involve "RM", the number of rooms as a confounding variable for all of them. Let's have a look at interaction plots for all three of them. This exercise will involve:
 
-- splitting our data up in 3 groups: one for houses with a few rooms, one for houses with a "medium" amount of rooms, one for a high amount of rooms.
-- Create a function `build_interaction_rm`. This function takes an argument `varname` (which can be set equal to the column name as a string) and a column `description` (which describes the variable or varname, to be included on the x-axis of the plot). The function outputs a plot that uses "RM" as a confounding factor. 
+- splitting the data up in 3 groups: one for houses with a few rooms, one for houses with a "medium" amount of rooms, one for a high amount of rooms.
+- Create a function `build_interaction_rm`. This function takes an argument `varname` (which can be set equal to the column name as a string) and a column `description` (which describes the variable or varname, to be included on the x-axis of the plot). The function outputs a plot that uses "RM" as a confounding factor. Each plot should have three regression lines, one for each level of "RM." 
 
-We split the data set for high, medium and low amount of rooms for you.
+The data has been split into high, medium and low number of rooms for you.
 
 
 ```python
@@ -188,7 +188,7 @@ build_interaction_rm("TAX", "average tax rate")
 
 ## Build a final model including all three interactions at once
 
-Use 10-fold crossvalidation.
+Use 10-fold cross validation.
 
 
 ```python
@@ -211,7 +211,7 @@ final_model
 
 
 
-    0.7853084169016359
+    0.7853084169016563
 
 
 
@@ -226,10 +226,6 @@ results = model.fit()
 
 results.summary()
 ```
-
-    /Users/lore.dirick/anaconda3/lib/python3.6/site-packages/statsmodels/compat/pandas.py:56: FutureWarning: The pandas.core.datetools module is deprecated and will be removed in a future version. Please use the pandas.tseries module instead.
-      from pandas.core import datetools
-
 
 
 
@@ -246,10 +242,10 @@ results.summary()
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   134.4</td> 
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sun, 04 Nov 2018</td> <th>  Prob (F-statistic):</th> <td>2.83e-167</td>
+  <th>Date:</th>             <td>Thu, 18 Apr 2019</td> <th>  Prob (F-statistic):</th> <td>2.83e-167</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>19:44:35</td>     <th>  Log-Likelihood:    </th> <td> -1413.8</td> 
+  <th>Time:</th>                 <td>09:49:00</td>     <th>  Log-Likelihood:    </th> <td> -1413.8</td> 
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>   506</td>      <th>  AIC:               </th> <td>   2862.</td> 
@@ -333,14 +329,28 @@ results.summary()
 <tr>
   <th>Kurtosis:</th>      <td>13.305</td>  <th>  Cond. No.          </th> <td>1.18e+05</td>
 </tr>
-</table>
+</table><br/><br/>Warnings:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.<br/>[2] The condition number is large, 1.18e+05. This might indicate that there are<br/>strong multicollinearity or other numerical problems.
 
 
 
 What is your conclusion here?
 
-Even though each individual interaction had a considerable effect on the $R^2$, but adding all three of them in our final model led to insignificant results for some of them. It might be worth checking how the $R^2$ changes again when just including 2 interactions in the final model.
+
+```python
+"""Even though each individual interaction had a considerable effect
+on the $R^2$, but adding all three of them in our final model led to
+insignificant results for some of them. It might be worth checking 
+how the $R^2$ changes again when just including 2 interactions in 
+the final model."""
+```
+
+
+
+
+    'Even though each individual interaction had a considerable effect\non the $R^2$, but adding all three of them in our final model led to\ninsignificant results for some of them. It might be worth checking \nhow the $R^2$ changes again when just including 2 interactions in \nthe final model.'
+
+
 
 ## Summary
 
-You now understand how to include interaction effects in your model!
+You should now understand how to include interaction effects in your model! As you can see, interactions can have a strong impact on linear regression models, and they should always be considered when you are constructing your models.
