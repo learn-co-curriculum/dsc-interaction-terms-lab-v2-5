@@ -3,17 +3,17 @@
 
 ## Introduction
 
-In this lab, you'll explore interactions in the Boston Housing data set.
+In this lab, you'll explore interactions in the Boston Housing dataset.
 
 ## Objectives
 
 You will be able to:
-- Understand what interactions are
-- Understand how to accommodate for interactions in regression
+- Implement interaction terms in Python using the `sklearn` and `statsmodels` packages 
+- Interpret interaction variables in the context of a real-world problem 
 
 ## Build a baseline model 
 
-You'll use a couple of built-in functions, which we imported for you below.
+You'll use a couple of built-in functions, which we imported for you below: 
 
 
 ```python
@@ -38,12 +38,12 @@ Create a baseline model which includes all the variables in the Boston housing d
 
 
 ```python
-y = pd.DataFrame(boston.target,columns = ["target"])
+y = pd.DataFrame(boston.target,columns = ['target'])
 df = pd.DataFrame(boston.data, columns = boston.feature_names)
 all_data = pd.concat([y,df], axis = 1)
 
 crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
-baseline = np.mean(cross_val_score(regression, df, y, scoring="r2", cv=crossvalidation))
+baseline = np.mean(cross_val_score(regression, df, y, scoring='r2', cv=crossvalidation))
 ```
 
 
@@ -62,7 +62,7 @@ baseline
 
 Next, create all possible combinations of interactions, loop over them and add them to the baseline model one by one to see how they affect the $R^2$. We'll look at the 3 interactions which have the biggest effect on our $R^2$, so print out the top 3 combinations.
 
-You will create a for loop to loop through all the combinations of 2 predictors. You can use `combinations` from itertools to create a list of all the pairwise combinations. To find more info on how this is done, have a look [here](https://docs.python.org/2/library/itertools.html).
+You will create a `for` loop to loop through all the combinations of 2 predictors. You can use `combinations` from itertools to create a list of all the pairwise combinations. To find more info on how this is done, have a look [here](https://docs.python.org/2/library/itertools.html).
 
 
 ```python
@@ -75,11 +75,11 @@ combinations = list(combinations(boston.feature_names, 2))
 interactions = []
 data = df.copy()
 for comb in combinations:
-    data["interaction"] = data[comb[0]] * data[comb[1]]
-    score = np.mean(cross_val_score(regression, data, y, scoring="r2", cv=crossvalidation))
+    data['interaction'] = data[comb[0]] * data[comb[1]]
+    score = np.mean(cross_val_score(regression, data, y, scoring='r2', cv=crossvalidation))
     if score > baseline: interactions.append((comb[0], comb[1], round(score,3)))
             
-print("Top 3 interactions: %s" %sorted(interactions, key=lambda inter: inter[2], reverse=True)[:5])
+print('Top 3 interactions: %s' %sorted(interactions, key=lambda inter: inter[2], reverse=True)[:5])
 ```
 
     Top 3 interactions: [('RM', 'LSTAT', 0.786), ('RM', 'TAX', 0.775), ('RM', 'RAD', 0.768), ('RM', 'PTRATIO', 0.763), ('INDUS', 'RM', 0.758)]
@@ -89,14 +89,14 @@ print("Top 3 interactions: %s" %sorted(interactions, key=lambda inter: inter[2],
 
 The top three interactions seem to involve "RM", the number of rooms as a confounding variable for all of them. Let's have a look at interaction plots for all three of them. This exercise will involve:
 
-- splitting the data up in 3 groups: one for houses with a few rooms, one for houses with a "medium" amount of rooms, one for a high amount of rooms.
-- Create a function `build_interaction_rm`. This function takes an argument `varname` (which can be set equal to the column name as a string) and a column `description` (which describes the variable or varname, to be included on the x-axis of the plot). The function outputs a plot that uses "RM" as a confounding factor. Each plot should have three regression lines, one for each level of "RM." 
+- Splitting the data up in 3 groups: one for houses with a few rooms, one for houses with a "medium" amount of rooms, one for a high amount of rooms 
+- Create a function `build_interaction_rm()`. This function takes an argument `varname` (which can be set equal to the column name as a string) and a column `description` (which describes the variable or varname, to be included on the x-axis of the plot). The function outputs a plot that uses "RM" as a confounding factor. Each plot should have three regression lines, one for each level of "RM"  
 
-The data has been split into high, medium and low number of rooms for you.
+The data has been split into high, medium, and low number of rooms for you.
 
 
 ```python
-rm = np.asarray(df[["RM"]]).reshape(len(df[["RM"]]))
+rm = np.asarray(df[['RM']]).reshape(len(df[['RM']]))
 ```
 
 
@@ -106,7 +106,7 @@ med_rm = all_data[(rm > np.percentile(rm, 33)) & (rm <= np.percentile(rm, 67))]
 low_rm = all_data[rm <= np.percentile(rm, 33)]
 ```
 
-Create `build_interaction_rm`.
+Create `build_interaction_rm()`.
 
 
 ```python
@@ -114,9 +114,9 @@ def build_interaction_rm(varname, description):
     regression_h = LinearRegression()
     regression_m = LinearRegression()
     regression_l = LinearRegression()
-    regression_h.fit(high_rm[varname].values.reshape(-1, 1), high_rm["target"])
-    regression_m.fit(med_rm[varname].values.reshape(-1, 1), med_rm["target"])
-    regression_l.fit(low_rm[varname].values.reshape(-1, 1), low_rm["target"])
+    regression_h.fit(high_rm[varname].values.reshape(-1, 1), high_rm['target'])
+    regression_m.fit(med_rm[varname].values.reshape(-1, 1), med_rm['target'])
+    regression_l.fit(low_rm[varname].values.reshape(-1, 1), low_rm['target'])
 
     # Make predictions using the testing set
     pred_high = regression_h.predict(high_rm[varname].values.reshape(-1, 1))
@@ -130,23 +130,23 @@ def build_interaction_rm(varname, description):
 
     # Plot outputs
     plt.figure(figsize=(12,7))
-    plt.scatter(high_rm[varname], high_rm["target"],  color='blue', alpha = 0.3, label = "more rooms")
-    plt.scatter(med_rm[varname], med_rm["target"],  color='red', alpha = 0.3, label = "medium rooms")
-    plt.scatter(low_rm[varname], low_rm["target"],  color='orange', alpha = 0.3, label = "low amount of rooms")
+    plt.scatter(high_rm[varname], high_rm['target'],  color='blue', alpha = 0.3, label = 'more rooms')
+    plt.scatter(med_rm[varname], med_rm['target'],  color='red', alpha = 0.3, label = 'medium rooms')
+    plt.scatter(low_rm[varname], low_rm['target'],  color='orange', alpha = 0.3, label = 'low amount of rooms')
 
     plt.plot(low_rm[varname], pred_low,  color='orange', linewidth=2)
     plt.plot(med_rm[varname], pred_med,  color='red', linewidth=2)
     plt.plot(high_rm[varname], pred_high,  color='blue', linewidth=2)
-    plt.ylabel("house value")
+    plt.ylabel('house value')
     plt.xlabel(description)
     plt.legend()
 ```
 
-Next, use build_interaction_rm with the three variables that came out with the highest effect on $R^2$
+Next, use `build_interaction_rm()` with the three variables that came out with the highest effect on $R^2$. 
 
 
 ```python
-build_interaction_rm("LSTAT", "% of lower status")
+build_interaction_rm('LSTAT', '% of lower status')
 ```
 
     [-1.46614438]
@@ -160,7 +160,7 @@ build_interaction_rm("LSTAT", "% of lower status")
 
 
 ```python
-build_interaction_rm("RAD","highway accessibility index")
+build_interaction_rm('RAD','highway accessibility index')
 ```
 
     [-0.66803793]
@@ -174,7 +174,7 @@ build_interaction_rm("RAD","highway accessibility index")
 
 
 ```python
-build_interaction_rm("TAX", "average tax rate")
+build_interaction_rm('TAX', 'average tax rate')
 ```
 
     [-0.03708037]
@@ -188,7 +188,7 @@ build_interaction_rm("TAX", "average tax rate")
 
 ## Build a final model including all three interactions at once
 
-Use 10-fold cross validation.
+Use 10-fold cross-validation to build a model using all the above interactions. 
 
 
 ```python
@@ -196,11 +196,11 @@ regression = LinearRegression()
 crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
 
 df_inter = df.copy()
-df_inter["RM_LSTAT"] = df["RM"] * df["LSTAT"]
-df_inter["RM_TAX"] = df["RM"] * df["TAX"]
-df_inter["RM_RAD"] = df["RM"] * df["RAD"]
+df_inter['RM_LSTAT'] = df['RM'] * df['LSTAT']
+df_inter['RM_TAX'] = df['RM'] * df['TAX']
+df_inter['RM_RAD'] = df['RM'] * df['RAD']
 
-final_model = np.mean(cross_val_score(regression, df_inter, y, scoring="r2", cv=crossvalidation))
+final_model = np.mean(cross_val_score(regression, df_inter, y, scoring='r2', cv=crossvalidation))
 ```
 
 
@@ -215,7 +215,7 @@ final_model
 
 
 
-Our $R^2$ has increased considerably! Let's have a look in statsmodels to see if all these interactions are significant.
+Our $R^2$ has increased considerably! Let's have a look in `statsmodels` to see if all these interactions are significant.
 
 
 ```python
