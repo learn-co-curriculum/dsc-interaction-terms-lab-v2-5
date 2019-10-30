@@ -3,17 +3,17 @@
 
 ## Introduction
 
-In this lab, you'll explore interactions in the Boston Housing data set.
+In this lab, you'll explore interactions in the Boston Housing dataset.
 
 ## Objectives
 
 You will be able to:
-- Understand what interactions are
-- Understand how to accommodate for interactions in regression
+- Implement interaction terms in Python using the `sklearn` and `statsmodels` packages 
+- Interpret interaction variables in the context of a real-world problem 
 
 ## Build a baseline model 
 
-You'll use a couple of built-in functions, which we imported for you below.
+You'll use a couple of built-in functions, which we imported for you below: 
 
 
 ```python
@@ -50,7 +50,7 @@ baseline
 
 Next, create all possible combinations of interactions, loop over them and add them to the baseline model one by one to see how they affect the $R^2$. We'll look at the 3 interactions which have the biggest effect on our $R^2$, so print out the top 3 combinations.
 
-You will create a for loop to loop through all the combinations of 2 predictors. You can use `combinations` from itertools to create a list of all the pairwise combinations. To find more info on how this is done, have a look [here](https://docs.python.org/2/library/itertools.html).
+You will create a `for` loop to loop through all the combinations of 2 predictors. You can use `combinations` from itertools to create a list of all the pairwise combinations. To find more info on how this is done, have a look [here](https://docs.python.org/2/library/itertools.html).
 
 
 ```python
@@ -67,14 +67,14 @@ combinations = list(combinations(boston.feature_names, 2))
 
 The top three interactions seem to involve "RM", the number of rooms as a confounding variable for all of them. Let's have a look at interaction plots for all three of them. This exercise will involve:
 
-- splitting the data up in 3 groups: one for houses with a few rooms, one for houses with a "medium" amount of rooms, one for a high amount of rooms.
-- Create a function `build_interaction_rm`. This function takes an argument `varname` (which can be set equal to the column name as a string) and a column `description` (which describes the variable or varname, to be included on the x-axis of the plot). The function outputs a plot that uses "RM" as a confounding factor. Each plot should have three regression lines, one for each level of "RM." 
+- Splitting the data up in 3 groups: one for houses with a few rooms, one for houses with a "medium" amount of rooms, one for a high amount of rooms 
+- Create a function `build_interaction_rm()`. This function takes an argument `varname` (which can be set equal to the column name as a string) and a column `description` (which describes the variable or varname, to be included on the x-axis of the plot). The function outputs a plot that uses "RM" as a confounding factor. Each plot should have three regression lines, one for each level of "RM"  
 
-The data has been split into high, medium and low number of rooms for you.
+The data has been split into high, medium, and low number of rooms for you.
 
 
 ```python
-rm = np.asarray(df[["RM"]]).reshape(len(df[["RM"]]))
+rm = np.asarray(df[['RM']]).reshape(len(df[['RM']]))
 ```
 
 
@@ -84,7 +84,7 @@ med_rm = all_data[(rm > np.percentile(rm, 33)) & (rm <= np.percentile(rm, 67))]
 low_rm = all_data[rm <= np.percentile(rm, 33)]
 ```
 
-Create `build_interaction_rm`.
+Create `build_interaction_rm()`.
 
 
 ```python
@@ -92,7 +92,7 @@ def build_interaction_rm(varname, description):
     pass
 ```
 
-Next, use build_interaction_rm with the three variables that came out with the highest effect on $R^2$
+Next, use `build_interaction_rm()` with the three variables that came out with the highest effect on $R^2$. 
 
 
 ```python
@@ -111,7 +111,7 @@ Next, use build_interaction_rm with the three variables that came out with the h
 
 ## Build a final model including all three interactions at once
 
-Use 10-fold cross validation.
+Use 10-fold cross-validation to build a model using all the above interactions. 
 
 
 ```python
@@ -123,7 +123,7 @@ Use 10-fold cross validation.
 # code here
 ```
 
-Our $R^2$ has increased considerably! Let's have a look in statsmodels to see if all these interactions are significant.
+Our $R^2$ has increased considerably! Let's have a look in `statsmodels` to see if all these interactions are significant.
 
 
 ```python
