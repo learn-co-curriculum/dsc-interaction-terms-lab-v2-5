@@ -1013,11 +1013,11 @@ Identify what, if any, interaction terms you would create based on this informat
 
 Your plot should look something like this:
 
-![scatter plot solution](OldTown_vs_NoRidge.png)
+![scatter plot solution](https://curriculum-content.s3.amazonaws.com/data-science/images/OldTown_vs_NoRidge.png)
 
 If we drew the expected slopes based on the scatter plots, they would look something like this:
 
-![scatter plot solution annotated](OldTown_vs_NoRidge_Annotated.png)
+![scatter plot solution annotated](https://curriculum-content.s3.amazonaws.com/data-science/images/OldTown_vs_NoRidge_Annotated.png)
 
 The slope of the orange line looks fairly different from the slope of the gray line, indicating that an interaction term for `NoRidge` might be useful.
 
@@ -1057,7 +1057,7 @@ Describe your interpretation below:
 
 Your plots should look something like this:
 
-![side by side plots solution](LotArea_vs_SalePrice.png)
+![side by side plots solution](https://curriculum-content.s3.amazonaws.com/data-science/images/LotArea_vs_SalePrice.png)
 
 For both `1stFlrSF` and `GrLivArea`, it seems like a larger lot area doesn't matter very much for homes with less square footage. (In other words, the slope is closer to a flat line when the dots are lighter colored.) Then for homes with more square footage, a larger lot area seems to matter more for the sale price. (In other words, the slope is steeper when the dots are darker colored.)
 
